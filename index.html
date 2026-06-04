@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta id="themeColor" name="theme-color" content="#4F46E5">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Ingeni-Convert">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="description" content="Convertidor de magnitudes físicas para ingeniería, ciencias y educación.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚗️</text></svg>">
+<title>Ingeni-Convert</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F7F8FC;--surface:#fff;--border:#E4E7EF;--text:#111827;--muted:#6B7280;
+  --accent:#4F46E5;--accent-light:#EEF2FF;--radius:12px;
+  --shadow:0 1px 4px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.05);
+  --shadow-sm:0 1px 3px rgba(0,0,0,.06);
+  --pop-bg:#111827;--pop-text:#fff;--pop-muted:#9CA3AF;
+  --c-masa:#FDE8EE;--c-volumen:#DBEAFE;--c-distancia:#D1FAE5;--c-densidad:#FEF9C3;
+  --c-presion:#EDE9FE;--c-tiempo:#FFEDD5;--c-fuerza:#FCE7F3;--c-energia:#DCFCE7;
+  --a-masa:#BE185D;--a-volumen:#1D4ED8;--a-distancia:#065F46;--a-densidad:#854D0E;
+  --a-presion:#5B21B6;--a-tiempo:#9A3412;--a-fuerza:#9D174D;--a-energia:#166534;
+}
+html.dark{
+  --bg:#0D1117;--surface:#161B22;--border:#21262D;--text:#E6EDF3;--muted:#7D8590;
+  --accent:#818CF8;--accent-light:#1E1B4B;
+  --shadow:0 1px 4px rgba(0,0,0,.4),0 4px 16px rgba(0,0,0,.3);
+  --shadow-sm:0 1px 3px rgba(0,0,0,.3);
+  --pop-bg:#2D3748;--pop-text:#E6EDF3;--pop-muted:#A0AEC0;
+  --c-masa:#2D0A15;--c-volumen:#0A1628;--c-distancia:#022C1B;--c-densidad:#1C0E00;
+  --c-presion:#150B2D;--c-tiempo:#1C0A00;--c-fuerza:#250613;--c-energia:#021408;
+  --a-masa:#F472B6;--a-volumen:#60A5FA;--a-distancia:#34D399;--a-densidad:#FCD34D;
+  --a-presion:#A78BFA;--a-tiempo:#FB923C;--a-fuerza:#F9A8D4;--a-energia:#86EFAC;
+}
+.theme-tr *{transition:background-color .25s,border-color .25s,color .25s,box-shadow .25s !important}
+body{font-family:'Inter','Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px}
+
+/* HEADER */
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:60px;
+  display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:10px}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;background:none;border:none;padding:4px;border-radius:8px;transition:.18s}
+.logo:hover{background:var(--accent-light)}
+.logo-mark{width:32px;height:32px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-mark svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.logo-text{font-size:1rem;font-weight:700;color:var(--text);letter-spacing:-.3px}
+.logo-text span{color:var(--accent)}
+.header-right{display:flex;align-items:center;gap:6px}
+.icon-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:.18s;color:var(--muted)}
+.icon-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+.icon-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.lang-btn{background:none;border:1px solid var(--border);padding:6px 12px;border-radius:8px;cursor:pointer;
+  font-family:'Inter',sans-serif;font-weight:600;color:var(--muted);font-size:.8rem;letter-spacing:.3px;transition:.18s}
+.lang-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* MAIN */
+main{max-width:1060px;margin:0 auto;padding:36px 20px 60px}
+
+/* HERO */
+.hero{margin-bottom:32px}
+.hero h1{font-size:clamp(1.55rem,3.5vw,2.1rem);font-weight:800;letter-spacing:-.5px;margin-bottom:6px;line-height:1.2}
+.hero p{color:var(--muted);font-size:.95rem;margin-bottom:20px;max-width:520px}
+.search-wrap{position:relative;max-width:420px}
+.search-wrap input{width:100%;padding:10px 36px 10px 36px;border-radius:var(--radius);border:1px solid var(--border);
+  font-size:.9rem;font-family:'Inter',sans-serif;background:var(--surface);outline:none;transition:.18s;color:var(--text);font-weight:500}
+.search-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,70,229,.1)}
+html.dark .search-wrap input:focus{box-shadow:0 0 0 3px rgba(129,140,248,.15)}
+.search-wrap input::placeholder{color:#9CA3AF}
+.s-ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:#9CA3AF;pointer-events:none}
+.s-ico svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.s-clr{position:absolute;right:11px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#9CA3AF;display:none;font-size:.85rem;line-height:1;padding:2px}
+.s-clr.vis{display:block}
+
+/* SEC LABEL */
+.sec-label{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:24px 0 12px}
+
+/* CAT GRID */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:4px}
+.cat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 16px 16px;
+  cursor:pointer;transition:.2s;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
+.cat-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent-line);opacity:0;transition:.2s;border-radius:3px 0 0 3px}
+.cat-card:hover{border-color:var(--accent-line);box-shadow:var(--shadow);transform:translateY(-2px)}
+.cat-card:hover::before{opacity:1}
+.ci{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;background:var(--ci-bg)}
+.cn{font-weight:700;font-size:.92rem}
+.cd{font-size:.76rem;color:var(--muted);line-height:1.4}
+.cc-masa{--accent-line:var(--a-masa);--ci-bg:var(--c-masa)}
+.cc-volumen{--accent-line:var(--a-volumen);--ci-bg:var(--c-volumen)}
+.cc-distancia{--accent-line:var(--a-distancia);--ci-bg:var(--c-distancia)}
+.cc-densidad{--accent-line:var(--a-densidad);--ci-bg:var(--c-densidad)}
+.cc-presion{--accent-line:var(--a-presion);--ci-bg:var(--c-presion)}
+.cc-tiempo{--accent-line:var(--a-tiempo);--ci-bg:var(--c-tiempo)}
+.cc-fuerza{--accent-line:var(--a-fuerza);--ci-bg:var(--c-fuerza)}
+.cc-energia{--accent-line:var(--a-energia);--ci-bg:var(--c-energia)}
+
+/* MV + HIST GRID */
+.mv-grid,.hist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:4px}
+.mv-card,.hist-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:12px 14px;cursor:pointer;transition:.18s;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-sm)}
+.mv-card:hover,.hist-card:hover{border-color:var(--accent);box-shadow:var(--shadow)}
+.mv-dot,.hist-dot{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.mv-t,.hist-conv{font-weight:600;font-size:.85rem}
+.mv-s,.hist-cat{font-size:.74rem;color:var(--muted);margin-top:2px}
+.card-arrow{margin-left:auto;color:var(--muted);font-size:.8rem;flex-shrink:0}
+
+/* CONVERTER */
+#convView{display:none}
+.breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:24px}
+.bc-home{background:none;border:none;font-family:'Inter',sans-serif;font-size:.85rem;font-weight:500;color:var(--muted);cursor:pointer;padding:0;transition:.18s}
+.bc-home:hover{color:var(--accent)}
+.bc-sep{color:var(--border);font-size:.8rem}
+.bc-cur{font-size:.85rem;font-weight:600}
+.conv-wrap{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.conv-panel,.result-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-sm)}
+.result-panel{position:sticky;top:76px}
+.panel-label{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.field{margin-bottom:14px}
+.field-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+.field-head label{font-size:.82rem;font-weight:600;color:var(--muted)}
+.info-btn{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--border);background:none;cursor:pointer;
+  font-family:'Inter',sans-serif;font-size:.65rem;font-weight:700;color:var(--muted);
+  display:flex;align-items:center;justify-content:center;transition:.18s;flex-shrink:0}
+.info-btn:hover,.info-btn.active{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+.field input,.field select{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:9px;
+  font-size:.95rem;font-family:'Inter',sans-serif;font-weight:600;color:var(--text);background:var(--surface);outline:none;transition:.18s}
+.field input:focus,.field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,70,229,.1)}
+html.dark .field input:focus,html.dark .field select:focus{box-shadow:0 0 0 3px rgba(129,140,248,.15)}
+.field select{appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239CA3AF' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;background-color:var(--surface);padding-right:34px;cursor:pointer}
+.field input::placeholder{color:#D1D5DB;font-weight:400}
+.swap-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;
+  padding:9px;border:1px solid var(--border);border-radius:9px;background:var(--bg);
+  cursor:pointer;font-family:'Inter',sans-serif;font-size:.82rem;font-weight:600;
+  color:var(--muted);transition:.18s;margin-bottom:14px}
+.swap-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+.swap-btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+/* RESULT */
+.result-header{display:flex;align-items:center;gap:10px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.r-icon{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.r-title{font-size:.95rem;font-weight:700}
+.r-sub{font-size:.76rem;color:var(--muted);margin-top:2px}
+.result-value-wrap{background:var(--bg);border-radius:10px;padding:20px;margin-bottom:12px;text-align:center;border:1px solid var(--border)}
+@keyframes popIn{0%{opacity:.3;transform:scale(.95)}60%{transform:scale(1.02)}100%{opacity:1;transform:scale(1)}}
+.rv-num{font-size:2.4rem;font-weight:800;letter-spacing:-1px;word-break:break-all;line-height:1.1}
+.rv-num.pop{animation:popIn .25s ease-out}
+.rv-unit{font-size:.85rem;font-weight:600;color:var(--muted);margin-top:6px}
+
+/* DECIMAL CONTROL */
+.dec-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.dec-lbl{font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);flex-shrink:0}
+.dec-group{display:flex;gap:4px}
+.dec-btn{padding:4px 10px;border:1px solid var(--border);border-radius:6px;background:none;cursor:pointer;
+  font-family:'Inter',sans-serif;font-size:.78rem;font-weight:600;color:var(--muted);transition:.15s}
+.dec-btn:hover{border-color:var(--accent);color:var(--accent)}
+.dec-btn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+
+.copy-btn{width:100%;padding:10px;border:1px solid var(--border);border-radius:9px;background:var(--surface);
+  cursor:pointer;font-family:'Inter',sans-serif;font-size:.85rem;font-weight:600;color:var(--muted);transition:.18s;margin-bottom:14px}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+.factor-box{background:var(--bg);border-radius:9px;padding:12px 14px;border:1px solid var(--border)}
+.factor-lbl{font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.factor-val{font-size:.88rem;font-weight:600;font-variant-numeric:tabular-nums}
+
+/* TOOLTIP */
+.info-pop{position:fixed;z-index:999;background:var(--pop-bg);border-radius:10px;padding:12px 14px;
+  max-width:260px;min-width:200px;box-shadow:0 8px 24px rgba(0,0,0,.2);pointer-events:none;
+  opacity:0;transform:translateY(4px);transition:opacity .15s,transform .15s;display:none}
+.info-pop.show{opacity:1;transform:translateY(0);display:block;pointer-events:auto}
+html.dark .info-pop{border:1px solid #4A5568}
+.pop-arrow{position:absolute;width:8px;height:8px;background:var(--pop-bg);transform:rotate(45deg);top:-4px;left:50%;margin-left:-4px}
+html.dark .pop-arrow{border-left:1px solid #4A5568;border-top:1px solid #4A5568}
+.pop-title{font-size:.82rem;font-weight:700;margin-bottom:5px;color:var(--pop-text)}
+.pop-body{font-size:.78rem;line-height:1.5;color:var(--pop-muted)}
+
+.no-res{padding:32px;text-align:center;color:var(--muted);font-size:.9rem;font-weight:500;grid-column:1/-1}
+footer{border-top:1px solid var(--border);padding:20px 24px;text-align:center;background:var(--surface)}
+.footer-name{font-size:.8rem;font-weight:700;letter-spacing:-.2px}
+.footer-name span{color:var(--accent)}
+.footer-team{font-size:.74rem;color:var(--muted);margin-top:4px}
+
+/* KEYBOARD FOCUS OUTLINE */
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+@media(max-width:620px){.conv-wrap{grid-template-columns:1fr}}
+@media(max-width:500px){.cat-grid{grid-template-columns:repeat(2,1fr)};main{padding:24px 14px 40px};header{padding:0 14px}}
+</style>
+</head>
+<body>
+
+<header>
+  <button class="logo" onclick="goHome()">
+    <div class="logo-mark">
+      <svg viewBox="0 0 20 20"><path d="M5 15l-3-3 3-3M2 12h12"/><path d="M15 11l3-3-3-3M18 8H6"/></svg>
+    </div>
+    <span class="logo-text">Ingeni<span>Convert</span></span>
+  </button>
+  <div class="header-right">
+    <button class="icon-btn" id="darkBtn" onclick="toggleDark()">
+      <svg id="darkIco" viewBox="0 0 20 20"></svg>
+    </button>
+    <button class="lang-btn" id="langBtn" onclick="toggleLang()">EN</button>
+  </div>
+</header>
+
+<div class="info-pop" id="infoPop">
+  <div class="pop-arrow" id="popArrow"></div>
+  <div class="pop-title" id="popTitle"></div>
+  <div class="pop-body" id="popBody"></div>
+</div>
+
+<main>
+  <div id="homeView">
+    <div class="hero">
+      <h1 id="heroTitle">Conversión de magnitudes físicas</h1>
+      <p id="heroDesc">Herramienta de referencia para ingeniería, ciencias y educación.</p>
+      <div class="search-wrap">
+        <span class="s-ico"><svg viewBox="0 0 20 20"><circle cx="9" cy="9" r="6"/><path d="M15 15l-3.5-3.5"/></svg></span>
+        <input type="text" id="searchInp" autocomplete="off" oninput="filterCats(this.value)">
+        <button class="s-clr" id="sClr" onclick="clearSearch()">✕</button>
+      </div>
+    </div>
+
+    <div id="histSection" style="display:none">
+      <div class="sec-label" id="histTitle">Recientes</div>
+      <div class="hist-grid" id="histGrid"></div>
+    </div>
+
+    <div class="sec-label" id="catTitle">Magnitudes</div>
+    <div class="cat-grid" id="catGrid"></div>
+
+    <div class="sec-label" id="mvTitle">Conversiones frecuentes</div>
+    <div class="mv-grid" id="mvGrid"></div>
+  </div>
+
+  <div id="convView">
+    <div class="breadcrumb">
+      <button class="bc-home" onclick="goHome()" id="bcHome">Inicio</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-cur" id="bcCur"></span>
+    </div>
+    <div class="conv-wrap">
+      <div class="conv-panel">
+        <div class="panel-label" id="lInput">Parámetros de conversión</div>
+        <div class="field">
+          <div class="field-head"><label id="lFromVal">Valor</label></div>
+          <input type="number" id="cVal" placeholder="Ingresa un número" oninput="doConvert()" onblur="addToHistory()">
+        </div>
+        <div class="field">
+          <div class="field-head">
+            <label id="lFromU">Unidad de origen</label>
+            <button class="info-btn" id="infoBtnFrom" onclick="toggleInfo('from',this)">?</button>
+          </div>
+          <select id="fromU" onchange="doConvert();addToHistory();refreshInfo()"></select>
+        </div>
+        <button class="swap-btn" onclick="swapU()">
+          <svg viewBox="0 0 20 20"><path d="M5 4l-3 3 3 3M2 7h12"/><path d="M15 16l3-3-3-3M18 13H6"/></svg>
+          <span id="lSwap">Intercambiar unidades</span>
+        </button>
+        <div class="field">
+          <div class="field-head">
+            <label id="lToU">Unidad destino</label>
+            <button class="info-btn" id="infoBtnTo" onclick="toggleInfo('to',this)">?</button>
+          </div>
+          <select id="toU" onchange="doConvert();addToHistory();refreshInfo()"></select>
+        </div>
+      </div>
+
+      <div class="result-panel">
+        <div class="result-header">
+          <div class="r-icon" id="rIcon"></div>
+          <div><div class="r-title" id="rTitle"></div><div class="r-sub" id="rSub"></div></div>
+        </div>
+        <div class="result-value-wrap">
+          <div class="rv-num" id="resVal">—</div>
+          <div class="rv-unit" id="resUnit"></div>
+        </div>
+        <div class="dec-row">
+          <span class="dec-lbl" id="lDec">Precisión</span>
+          <div class="dec-group">
+            <button class="dec-btn on" onclick="setDec('auto',this)">Auto</button>
+            <button class="dec-btn" onclick="setDec(2,this)">2</button>
+            <button class="dec-btn" onclick="setDec(4,this)">4</button>
+            <button class="dec-btn" onclick="setDec(6,this)">6</button>
+            <button class="dec-btn" onclick="setDec('sci',this)">Sci</button>
+          </div>
+        </div>
+        <button class="copy-btn" id="copyBtn" onclick="copyRes()">Copiar resultado</button>
+        <div class="factor-box">
+          <div class="factor-lbl" id="lFactor">Factor de conversión</div>
+          <div class="factor-val" id="formulaHint">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-name">Ingeni<span>Convert</span> · Sistemas Internacionales de Medidas</div>
+  <div class="footer-team">Yarela Huillín · Amparo Coronado · Manuel Navarrete · Maximiliano Medina · Brayan Durán · Angel Pardo</div>
+</footer>
+
+<script>
+let L='es',dark=false,decMode='auto',convHistory=[],curCat=null,openInfoTarget=null;
+
+const MOON=`<path d="M17 14.77A8 8 0 118.23 3a7 7 0 109.54 11.8-.5.5 0 00-.77 0z"/>`;
+const SUN=`<circle cx="10" cy="10" r="3.5"/><path d="M10 3v2M10 15v2M3 10h2M15 10h2M5.05 5.05l1.41 1.41M13.54 13.54l1.41 1.41M5.05 14.95l1.41-1.41M13.54 6.46l1.41-1.41"/>`;
+
+const T={
+  es:{hero:'Conversión de magnitudes físicas',desc:'Herramienta de referencia para ingeniería, ciencias y educación.',
+    search:'Buscar magnitud o unidad…',catT:'Magnitudes',mvT:'Conversiones frecuentes',histT:'Recientes',
+    bcHome:'Inicio',lInput:'Parámetros de conversión',lFromVal:'Valor',lFromU:'Unidad de origen',
+    lToU:'Unidad destino',lSwap:'Intercambiar unidades',copy:'Copiar resultado',copied:'Copiado ✓',
+    eq:'=',lFactor:'Factor de conversión',lDec:'Precisión',langBtn:'EN',darkTip:'Modo oscuro',lightTip:'Modo claro'},
+  en:{hero:'Physical magnitude conversion',desc:'Reference tool for engineering, science and education.',
+    search:'Search magnitude or unit…',catT:'Magnitudes',mvT:'Frequent conversions',histT:'Recent',
+    bcHome:'Home',lInput:'Conversion parameters',lFromVal:'Value',lFromU:'From unit',
+    lToU:'To unit',lSwap:'Swap units',copy:'Copy result',copied:'Copied ✓',
+    eq:'=',lFactor:'Conversion factor',lDec:'Precision',langBtn:'ES',darkTip:'Dark mode',lightTip:'Light mode'}
+};
+
+const INFO={
+  kg:{es:['Kilogramo','Unidad base del SI. La masa de 1 litro de agua es ≈ 1 kg. Usada en industria, comercio y ciencias.'],en:['Kilogram','SI base unit. 1 liter of water ≈ 1 kg. Used in industry, commerce and science.']},
+  g:{es:['Gramo','1/1000 de kg. Muy usada en química, farmacia, nutrición y cocina.'],en:['Gram','1/1000 of a kg. Common in chemistry, pharmacy, nutrition and cooking.']},
+  mg:{es:['Miligramo','1/1000 de gramo. Estándar en dosificación de medicamentos y análisis de laboratorio.'],en:['Milligram','1/1000 of a gram. Standard for drug dosing and lab analysis.']},
+  mcg:{es:['Microgramo','1/1000 de miligramo. Usada en toxicología, análisis de trazas y nutrición.'],en:['Microgram','1/1000 of a milligram. Used in toxicology, trace analysis and nutrition.']},
+  lb:{es:['Libra','Sistema anglosajón. 1 lb ≈ 0.454 kg. Común en EE.UU. para pesos corporales, alimentos y aviación.'],en:['Pound','Imperial system. 1 lb ≈ 0.454 kg. Common in the US for body weight, food and aviation.']},
+  oz:{es:['Onza','1/16 de libra ≈ 28.35 g. Usada en cocina y productos alimenticios en países anglosajones.'],en:['Ounce','1/16 of a lb ≈ 28.35 g. Used in cooking and food products in English-speaking countries.']},
+  ton:{es:['Tonelada métrica','1000 kg. Estándar en comercio internacional, industria y transporte de carga.'],en:['Metric ton','1000 kg. Standard in international trade, industry and freight transport.']},
+  slug:{es:['Slug','Masa que se acelera 1 ft/s² con 1 lbf. Usada en dinámica anglosajona.'],en:['Slug','Mass accelerated at 1 ft/s² by 1 lbf. Used in US/UK dynamics.']},
+  L:{es:['Litro','1 L = 1 dm³. Ampliamente usada en medicina, química y vida cotidiana.'],en:['Liter','1 L = 1 dm³. Widely used in medicine, chemistry and daily life.']},
+  mL:{es:['Mililitro','1/1000 L = 1 cm³. Laboratorio, medicina y recetas de cocina.'],en:['Milliliter','1/1000 L = 1 cm³. Labs, medicine and cooking recipes.']},
+  m3:{es:['Metro cúbico','Unidad SI de volumen. Gases, tanques industriales y construcción.'],en:['Cubic meter','SI volume unit. Gases, industrial tanks and construction.']},
+  cm3:{es:['Centímetro cúbico','Equivale a 1 mL. Laboratorio, mecánica de fluidos y medicina.'],en:['Cubic centimeter','Equals 1 mL. Labs, fluid mechanics and medicine.']},
+  gal:{es:['Galón US','3.785 L. Estándar para combustibles y líquidos en Estados Unidos.'],en:['US Gallon','3.785 L. Standard for fuels and liquids in the United States.']},
+  ft3:{es:['Pie cúbico','28.32 L. Usada en HVAC, gas natural y construcción anglosajona.'],en:['Cubic foot','28.32 L. Used in HVAC, natural gas and US/UK construction.']},
+  in3:{es:['Pulgada cúbica','16.39 mL. Cilindradas de motores y sistemas hidráulicos en el sistema imperial.'],en:['Cubic inch','16.39 mL. Engine displacement and hydraulic systems in the imperial system.']},
+  tsp:{es:['Cucharadita','≈ 5 mL. Medida culinaria estándar.'],en:['Teaspoon','≈ 5 mL. Standard culinary measure.']},
+  tbsp:{es:['Cucharada','3 cucharaditas ≈ 15 mL. Medida culinaria estándar en recetarios anglosajones.'],en:['Tablespoon','3 tsp ≈ 15 mL. Standard culinary measure.']},
+  m:{es:['Metro','Unidad base SI de longitud. Referencia universal en ingeniería, física y construcción.'],en:['Meter','SI base unit for length. Universal reference in engineering, physics and construction.']},
+  km:{es:['Kilómetro','1000 m. Geografía, cartografía, navegación y transporte terrestre.'],en:['Kilometer','1000 m. Geography, cartography, navigation and land transport.']},
+  cm:{es:['Centímetro','0.01 m. Medidas corporales, textiles y uso cotidiano.'],en:['Centimeter','0.01 m. Body measurements, textiles and everyday use.']},
+  mm:{es:['Milímetro','0.001 m. Mecánica de precisión, manufactura e impresión 3D.'],en:['Millimeter','0.001 m. Precision mechanics, manufacturing and 3D printing.']},
+  in:{es:['Pulgada','2.54 cm. Electrónica (tamaños de pantalla), tuberías y manufactura en EE.UU.'],en:['Inch','2.54 cm. Electronics (screen sizes), piping and US manufacturing.']},
+  ft:{es:['Pie','30.48 cm. Aviación (altitudes), construcción y arquitectura en EE.UU.'],en:['Foot','30.48 cm. Aviation (altitudes), US construction and architecture.']},
+  yd:{es:['Yarda','0.914 m. Textiles, deportes (fútbol americano) y sistema anglosajón.'],en:['Yard','0.914 m. Textiles, sports (American football) and the imperial system.']},
+  mi:{es:['Milla','1609 m. Transporte terrestre y aviación en países anglosajones.'],en:['Mile','1609 m. Land transport and aviation in English-speaking countries.']},
+  nm:{es:['Nanómetro','10⁻⁹ m. Longitudes de onda de la luz visible, semiconductores y nanotecnología.'],en:['Nanometer','10⁻⁹ m. Visible light wavelengths, semiconductors and nanotechnology.']},
+  au:{es:['Unidad Astronómica','Distancia media Tierra-Sol ≈ 150 millones de km. Exclusiva de astronomía.'],en:['Astronomical Unit','Mean Earth-Sun distance ≈ 150 million km. Used exclusively in astronomy.']},
+  kgm3:{es:['kg/m³','Unidad SI de densidad. Para gases, fluidos y materiales. Agua ≈ 1000 kg/m³.'],en:['kg/m³','SI density unit. For gases, fluids and materials. Water ≈ 1000 kg/m³.']},
+  gcm3:{es:['g/cm³','Para sólidos y líquidos. Agua = 1 g/cm³ exactamente. Química y mineralogía.'],en:['g/cm³','For solids and liquids. Water = exactly 1 g/cm³. Chemistry and mineralogy.']},
+  gml:{es:['g/mL','Equivale a g/cm³. Muy usada en química de laboratorio para soluciones.'],en:['g/mL','Equals g/cm³. Common in lab chemistry for solutions.']},
+  kgL:{es:['kg/L','Equivale a g/cm³. Conveniente para líquidos: agua = 1 kg/L.'],en:['kg/L','Equals g/cm³. Convenient for liquids: water = 1 kg/L.']},
+  lbft3:{es:['lb/ft³','Sistema imperial. Construcción, HVAC y materiales en EE.UU.'],en:['lb/ft³','Imperial system. US construction, HVAC and materials.']},
+  lbin3:{es:['lb/in³','Alta densidad. Metales densos y materiales industriales en el sistema imperial.'],en:['lb/in³','High density. Dense metals and industrial materials in the imperial system.']},
+  Pa:{es:['Pascal','Unidad SI = 1 N/m². Meteorología, ingeniería de fluidos y acústica.'],en:['Pascal','SI unit = 1 N/m². Meteorology, fluid engineering and acoustics.']},
+  kPa:{es:['Kilopascal','1000 Pa. Presión de neumáticos, procesos industriales y medicina.'],en:['Kilopascal','1000 Pa. Tire pressure, industrial processes and medicine.']},
+  MPa:{es:['Megapascal','10⁶ Pa. Resistencia de materiales, hidráulica de alta presión y ensayos estructurales.'],en:['Megapascal','10⁶ Pa. Material strength, high-pressure hydraulics and structural testing.']},
+  atm:{es:['Atmósfera','Presión al nivel del mar = 101 325 Pa. Referencia en química y termodinámica.'],en:['Atmosphere','Sea-level pressure = 101 325 Pa. Reference in chemistry and thermodynamics.']},
+  bar:{es:['Bar','≈ 1 atm (100 000 Pa). Meteorología, industria europea y equipos de presión.'],en:['Bar','≈ 1 atm (100 000 Pa). Meteorology, European industry and pressure equipment.']},
+  mbar:{es:['Milibar','1/1000 de bar. Escala estándar en meteorología y pronósticos del tiempo.'],en:['Millibar','1/1000 of a bar. Standard scale in meteorology and weather forecasts.']},
+  mmHg:{es:['mmHg / Torr','Presión de 1 mm de mercurio. Estándar en medicina para tensión arterial.'],en:['mmHg / Torr','Pressure of 1 mm of mercury. Medical standard for blood pressure.']},
+  psi:{es:['PSI — lb/in²','Libras por pulgada cuadrada. Neumáticos, sistemas hidráulicos e industria anglosajona.'],en:['PSI — lb/in²','Pounds per square inch. Tire pressure, hydraulic systems and US/UK industry.']},
+  ms:{es:['Milisegundo','1/1000 de segundo. Latencia de redes, electrónica y procesos rápidos.'],en:['Millisecond','1/1000 of a second. Network latency, electronics and fast processes.']},
+  s:{es:['Segundo','Unidad base SI de tiempo. Definida por la radiación del átomo de cesio-133.'],en:['Second','SI base unit of time. Defined by the radiation of the cesium-133 atom.']},
+  min:{es:['Minuto','60 s. Planificación de procesos industriales, medicina y vida cotidiana.'],en:['Minute','60 s. Industrial process planning, medicine and daily life.']},
+  h:{es:['Hora','3600 s. Jornadas laborales, viajes y facturación de energía eléctrica (kWh).'],en:['Hour','3600 s. Work shifts, travel and electricity billing (kWh).']},
+  d:{es:['Día','86 400 s. Planificación de proyectos y ciclos biológicos.'],en:['Day','86 400 s. Project planning and biological cycles.']},
+  wk:{es:['Semana','7 días = 604 800 s. Gestión de proyectos y plazos de entrega.'],en:['Week','7 days = 604 800 s. Project management and delivery deadlines.']},
+  mo:{es:['Mes (30 días)','Aprox. 2 592 000 s. Facturación, producción y ciclos financieros.'],en:['Month (30 days)','Approx. 2 592 000 s. Billing, production and financial cycles.']},
+  yr:{es:['Año (365 días)','31 536 000 s. Ciclo orbital terrestre. Ingeniería a largo plazo y economía.'],en:['Year (365 days)','31 536 000 s. Earth\'s orbital cycle. Long-term engineering and economics.']},
+  N:{es:['Newton','Unidad SI. Fuerza que acelera 1 kg a 1 m/s². Base de la dinámica clásica.'],en:['Newton','SI unit. Force that accelerates 1 kg at 1 m/s². Foundation of classical dynamics.']},
+  kN:{es:['Kilonewton','1000 N. Cargas en estructuras, puentes, grúas y maquinaria pesada.'],en:['Kilonewton','1000 N. Loads in structures, bridges, cranes and heavy machinery.']},
+  MN:{es:['Meganewton','10⁶ N. Ingeniería civil de gran escala: presas y estructuras marítimas.'],en:['Meganewton','10⁶ N. Large-scale civil engineering: dams and offshore structures.']},
+  dyn:{es:['Dina','Sistema CGS. 1 dyn = 10⁻⁵ N. Física clásica, biofísica y reología.'],en:['Dyne','CGS system. 1 dyn = 10⁻⁵ N. Classical physics, biophysics and rheology.']},
+  kgf:{es:['Kilogramo-fuerza','Fuerza de 1 kg en gravedad estándar ≈ 9.806 N. Ingeniería latinoamericana y europea.'],en:['Kilogram-force','Force of 1 kg under standard gravity ≈ 9.806 N. Latin American and European engineering.']},
+  lbf:{es:['Libra-fuerza','Fuerza de 1 lb en gravedad estándar ≈ 4.448 N. Aeronáutica e ingeniería anglosajona.'],en:['Pound-force','Force of 1 lb under standard gravity ≈ 4.448 N. Aeronautics and US/UK engineering.']},
+  J:{es:['Joule','Unidad SI de energía. Trabajo de 1 N en 1 m. Base de termodinámica y mecánica.'],en:['Joule','SI energy unit. Work done by 1 N over 1 m. Foundation of thermodynamics and mechanics.']},
+  kJ:{es:['Kilojoule','1000 J. Termodinámica, poder calorífico de combustibles y valor energético de alimentos.'],en:['Kilojoule','1000 J. Thermodynamics, fuel calorific value and food energy content.']},
+  MJ:{es:['Megajoule','10⁶ J. Energía de explosivos, combustibles y producción eléctrica industrial.'],en:['Megajoule','10⁶ J. Energy of explosives, fuels and industrial electricity generation.']},
+  cal:{es:['Caloría','Calor para elevar 1 g de agua 1 °C ≈ 4.184 J. Química y termoquímica.'],en:['Calorie','Heat to raise 1 g of water by 1 °C ≈ 4.184 J. Chemistry and thermochemistry.']},
+  kcal:{es:['Kilocaloría','1000 calorías. Estándar mundial para el contenido energético de los alimentos.'],en:['Kilocalorie','1000 calories. Global standard for expressing food energy content.']},
+  BTU:{es:['BTU','Calor para elevar 1 lb de agua 1 °F ≈ 1055 J. HVAC y energía en EE.UU. y Reino Unido.'],en:['BTU','Heat to raise 1 lb of water by 1 °F ≈ 1055 J. HVAC and energy in US and UK.']},
+  kWh:{es:['Kilowatt-hora','1 kWh = 3.6 MJ. Base de la facturación de energía eléctrica doméstica e industrial.'],en:['Kilowatt-hour','1 kWh = 3.6 MJ. Basis of domestic and industrial electricity billing.']},
+  eV:{es:['Electronvolt','Energía de un electrón al cruzar 1 V ≈ 1.602×10⁻¹⁹ J. Física de partículas y espectroscopía.'],en:['Electronvolt','Energy of an electron crossing 1 V ≈ 1.602×10⁻¹⁹ J. Particle physics and spectroscopy.']},
+};
+
+const CATS=[
+  {id:'masa',e:'⚖',bg:'var(--c-masa)',ac:'var(--a-masa)',name:{es:'Masa',en:'Mass'},desc:{es:'kg · g · lb · oz · tonelada',en:'kg · g · lb · oz · ton'},
+   units:[{id:'kg',l:{es:'Kilogramo (kg)',en:'Kilogram (kg)'},f:1},{id:'g',l:{es:'Gramo (g)',en:'Gram (g)'},f:0.001},{id:'mg',l:{es:'Miligramo (mg)',en:'Milligram (mg)'},f:1e-6},{id:'mcg',l:{es:'Microgramo (μg)',en:'Microgram (μg)'},f:1e-9},{id:'lb',l:{es:'Libra (lb)',en:'Pound (lb)'},f:0.453592},{id:'oz',l:{es:'Onza (oz)',en:'Ounce (oz)'},f:0.0283495},{id:'ton',l:{es:'Tonelada métrica (t)',en:'Metric ton (t)'},f:1000},{id:'slug',l:{es:'Slug',en:'Slug'},f:14.5939}]},
+  {id:'volumen',e:'⬡',bg:'var(--c-volumen)',ac:'var(--a-volumen)',name:{es:'Volumen',en:'Volume'},desc:{es:'L · mL · m³ · galón · ft³',en:'L · mL · m³ · gallon · ft³'},
+   units:[{id:'L',l:{es:'Litro (L)',en:'Liter (L)'},f:1},{id:'mL',l:{es:'Mililitro (mL)',en:'Milliliter (mL)'},f:0.001},{id:'m3',l:{es:'Metro cúbico (m³)',en:'Cubic meter (m³)'},f:1000},{id:'cm3',l:{es:'Centímetro³ (cm³)',en:'Cubic cm (cm³)'},f:0.001},{id:'gal',l:{es:'Galón US (gal)',en:'US Gallon (gal)'},f:3.78541},{id:'ft3',l:{es:'Pie cúbico (ft³)',en:'Cubic foot (ft³)'},f:28.3168},{id:'in3',l:{es:'Pulgada³ (in³)',en:'Cubic inch (in³)'},f:0.0163871},{id:'tsp',l:{es:'Cucharadita (tsp)',en:'Teaspoon (tsp)'},f:0.00492892},{id:'tbsp',l:{es:'Cucharada (tbsp)',en:'Tablespoon (tbsp)'},f:0.0147868}]},
+  {id:'distancia',e:'↔',bg:'var(--c-distancia)',ac:'var(--a-distancia)',name:{es:'Distancia',en:'Distance'},desc:{es:'m · km · in · ft · milla',en:'m · km · in · ft · mile'},
+   units:[{id:'m',l:{es:'Metro (m)',en:'Meter (m)'},f:1},{id:'km',l:{es:'Kilómetro (km)',en:'Kilometer (km)'},f:1000},{id:'cm',l:{es:'Centímetro (cm)',en:'Centimeter (cm)'},f:0.01},{id:'mm',l:{es:'Milímetro (mm)',en:'Millimeter (mm)'},f:0.001},{id:'in',l:{es:'Pulgada (in)',en:'Inch (in)'},f:0.0254},{id:'ft',l:{es:'Pie (ft)',en:'Foot (ft)'},f:0.3048},{id:'yd',l:{es:'Yarda (yd)',en:'Yard (yd)'},f:0.9144},{id:'mi',l:{es:'Milla (mi)',en:'Mile (mi)'},f:1609.344},{id:'nm',l:{es:'Nanómetro (nm)',en:'Nanometer (nm)'},f:1e-9},{id:'au',l:{es:'Unidad Astronómica (AU)',en:'Astron. Unit (AU)'},f:1.496e11}]},
+  {id:'densidad',e:'◈',bg:'var(--c-densidad)',ac:'var(--a-densidad)',name:{es:'Densidad',en:'Density'},desc:{es:'kg/m³ · g/cm³ · lb/ft³',en:'kg/m³ · g/cm³ · lb/ft³'},
+   units:[{id:'kgm3',l:{es:'kg/m³',en:'kg/m³'},f:1},{id:'gcm3',l:{es:'g/cm³',en:'g/cm³'},f:1000},{id:'gml',l:{es:'g/mL',en:'g/mL'},f:1000},{id:'kgL',l:{es:'kg/L',en:'kg/L'},f:1000},{id:'lbft3',l:{es:'lb/ft³',en:'lb/ft³'},f:16.0185},{id:'lbin3',l:{es:'lb/in³',en:'lb/in³'},f:27679.9}]},
+  {id:'presion',e:'△',bg:'var(--c-presion)',ac:'var(--a-presion)',name:{es:'Presión',en:'Pressure'},desc:{es:'Pa · atm · bar · mmHg · PSI',en:'Pa · atm · bar · mmHg · PSI'},
+   units:[{id:'Pa',l:{es:'Pascal (Pa)',en:'Pascal (Pa)'},f:1},{id:'kPa',l:{es:'Kilopascal (kPa)',en:'Kilopascal (kPa)'},f:1000},{id:'MPa',l:{es:'Megapascal (MPa)',en:'Megapascal (MPa)'},f:1e6},{id:'atm',l:{es:'Atmósfera (atm)',en:'Atmosphere (atm)'},f:101325},{id:'bar',l:{es:'Bar',en:'Bar'},f:100000},{id:'mbar',l:{es:'Milibar (mbar)',en:'Millibar (mbar)'},f:100},{id:'mmHg',l:{es:'mmHg / Torr',en:'mmHg / Torr'},f:133.322},{id:'psi',l:{es:'PSI (lb/in²)',en:'PSI (lb/in²)'},f:6894.76}]},
+  {id:'tiempo',e:'◷',bg:'var(--c-tiempo)',ac:'var(--a-tiempo)',name:{es:'Tiempo',en:'Time'},desc:{es:'s · min · h · día · año',en:'s · min · h · day · year'},
+   units:[{id:'ms',l:{es:'Milisegundo (ms)',en:'Millisecond (ms)'},f:0.001},{id:'s',l:{es:'Segundo (s)',en:'Second (s)'},f:1},{id:'min',l:{es:'Minuto (min)',en:'Minute (min)'},f:60},{id:'h',l:{es:'Hora (h)',en:'Hour (h)'},f:3600},{id:'d',l:{es:'Día',en:'Day'},f:86400},{id:'wk',l:{es:'Semana',en:'Week'},f:604800},{id:'mo',l:{es:'Mes (30 días)',en:'Month (30 days)'},f:2592000},{id:'yr',l:{es:'Año (365 días)',en:'Year (365 days)'},f:31536000}]},
+  {id:'fuerza',e:'→',bg:'var(--c-fuerza)',ac:'var(--a-fuerza)',name:{es:'Fuerza',en:'Force'},desc:{es:'N · kN · kgf · lbf · dina',en:'N · kN · kgf · lbf · dyne'},
+   units:[{id:'N',l:{es:'Newton (N)',en:'Newton (N)'},f:1},{id:'kN',l:{es:'Kilonewton (kN)',en:'Kilonewton (kN)'},f:1000},{id:'MN',l:{es:'Meganewton (MN)',en:'Meganewton (MN)'},f:1e6},{id:'dyn',l:{es:'Dina (dyn)',en:'Dyne (dyn)'},f:1e-5},{id:'kgf',l:{es:'Kilogramo-fuerza (kgf)',en:'Kilogram-force (kgf)'},f:9.80665},{id:'lbf',l:{es:'Libra-fuerza (lbf)',en:'Pound-force (lbf)'},f:4.44822}]},
+  {id:'energia',e:'∿',bg:'var(--c-energia)',ac:'var(--a-energia)',name:{es:'Energía',en:'Energy'},desc:{es:'J · kJ · cal · BTU · kWh',en:'J · kJ · cal · BTU · kWh'},
+   units:[{id:'J',l:{es:'Joule (J)',en:'Joule (J)'},f:1},{id:'kJ',l:{es:'Kilojoule (kJ)',en:'Kilojoule (kJ)'},f:1000},{id:'MJ',l:{es:'Megajoule (MJ)',en:'Megajoule (MJ)'},f:1e6},{id:'cal',l:{es:'Caloría (cal)',en:'Calorie (cal)'},f:4.184},{id:'kcal',l:{es:'Kilocaloría (kcal)',en:'Kilocalorie (kcal)'},f:4184},{id:'BTU',l:{es:'BTU',en:'BTU'},f:1055.06},{id:'kWh',l:{es:'Kilowatt-hora (kWh)',en:'Kilowatt-hour (kWh)'},f:3600000},{id:'eV',l:{es:'Electronvolt (eV)',en:'Electronvolt (eV)'},f:1.60218e-19}]},
+];
+
+const MV=[
+  {catId:'masa',from:'lb',to:'kg'},{catId:'distancia',from:'mi',to:'km'},
+  {catId:'energia',from:'kcal',to:'kJ'},{catId:'presion',from:'atm',to:'Pa'},
+  {catId:'volumen',from:'gal',to:'L'},{catId:'tiempo',from:'h',to:'s'},
+  {catId:'fuerza',from:'kgf',to:'N'},{catId:'distancia',from:'in',to:'cm'},
+  {catId:'masa',from:'ton',to:'kg'},{catId:'presion',from:'psi',to:'bar'},
+];
+
+/* ── DARK MODE ── */
+function toggleDark(){
+  document.documentElement.classList.add('theme-tr');
+  dark=!dark;
+  document.documentElement.classList.toggle('dark',dark);
+  document.getElementById('themeColor').content=dark?'#1E1B4B':'#4F46E5';
+  document.getElementById('darkIco').innerHTML=dark?SUN:MOON;
+  document.getElementById('darkBtn').title=T[L][dark?'lightTip':'darkTip'];
+  setTimeout(()=>document.documentElement.classList.remove('theme-tr'),300);
+}
+
+/* ── LANG ── */
+function toggleLang(){L=L==='es'?'en':'es';applyLang();}
+function applyLang(){
+  const t=T[L];
+  document.getElementById('heroTitle').textContent=t.hero;
+  document.getElementById('heroDesc').textContent=t.desc;
+  document.getElementById('searchInp').placeholder=t.search;
+  document.getElementById('catTitle').textContent=t.catT;
+  document.getElementById('mvTitle').textContent=t.mvT;
+  document.getElementById('bcHome').textContent=t.bcHome;
+  document.getElementById('lInput').textContent=t.lInput;
+  document.getElementById('lFromVal').textContent=t.lFromVal;
+  document.getElementById('lFromU').textContent=t.lFromU;
+  document.getElementById('lToU').textContent=t.lToU;
+  document.getElementById('lSwap').textContent=t.lSwap;
+  document.getElementById('copyBtn').textContent=t.copy;
+  document.getElementById('lFactor').textContent=t.lFactor;
+  document.getElementById('lDec').textContent=t.lDec;
+  document.getElementById('langBtn').textContent=t.langBtn;
+  document.getElementById('darkBtn').title=T[L][dark?'lightTip':'darkTip'];
+  hideInfo();
+  renderCats(document.getElementById('searchInp').value||'');
+  renderMV();renderHistory();
+  if(curCat){const fi=document.getElementById('fromU').value,ti=document.getElementById('toU').value;openConv(curCat.id,fi,ti);}
+}
+
+/* ── DECIMAL ── */
+function setDec(mode,btn){
+  decMode=mode;
+  document.querySelectorAll('.dec-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');doConvert();
+}
+
+/* ── RENDER CATS ── */
+function renderCats(q=''){
+  const g=document.getElementById('catGrid');g.innerHTML='';
+  const fl=CATS.filter(c=>c.name[L].toLowerCase().includes(q.toLowerCase())||c.units.some(u=>u.l[L].toLowerCase().includes(q.toLowerCase())));
+  if(!fl.length){g.innerHTML=`<div class="no-res">${L==='es'?'Sin resultados para':'No results for'} "${q}"</div>`;return;}
+  fl.forEach(cat=>{
+    const d=document.createElement('div');d.className=`cat-card cc-${cat.id}`;
+    d.innerHTML=`<div class="ci">${cat.e}</div><div class="cn">${cat.name[L]}</div><div class="cd">${cat.desc[L]}</div>`;
+    d.onclick=()=>openConv(cat.id);g.appendChild(d);
+  });
+}
+
+/* ── RENDER MV ── */
+function renderMV(){
+  const g=document.getElementById('mvGrid');g.innerHTML='';
+  MV.forEach(mv=>{
+    const cat=CATS.find(c=>c.id===mv.catId);
+    const fu=cat.units.find(u=>u.id===mv.from),tu=cat.units.find(u=>u.id===mv.to);
+    if(!fu||!tu)return;
+    const d=document.createElement('div');d.className='mv-card';
+    d.innerHTML=`<div class="mv-dot" style="background:${cat.bg};color:${cat.ac}">${cat.e}</div><div><div class="mv-t">${sym(fu.l[L])} → ${sym(tu.l[L])}</div><div class="mv-s">${cat.name[L]}</div></div><span class="card-arrow">›</span>`;
+    d.onclick=()=>openConv(cat.id,mv.from,mv.to);g.appendChild(d);
+  });
+}
+
+/* ── RENDER HISTORY ── */
+function renderHistory(){
+  const sec=document.getElementById('histSection'),g=document.getElementById('histGrid');
+  if(!convHistory.length){sec.style.display='none';return;}
+  sec.style.display='block';
+  document.getElementById('histTitle').textContent=T[L].histT;
+  g.innerHTML='';
+  convHistory.forEach(h=>{
+    const cat=CATS.find(c=>c.id===h.catId);if(!cat)return;
+    const fu=cat.units.find(u=>u.id===h.fromId),tu=cat.units.find(u=>u.id===h.toId);if(!fu||!tu)return;
+    const d=document.createElement('div');d.className='hist-card';
+    d.innerHTML=`<div class="hist-dot" style="background:${cat.bg};color:${cat.ac}">${cat.e}</div>
+      <div><div class="hist-conv">${fmtN(h.value)} ${getS(fu.l[L])} → ${h.result} ${getS(tu.l[L])}</div>
+      <div class="hist-cat">${cat.name[L]}</div></div>`;
+    d.onclick=()=>openConv(h.catId,h.fromId,h.toId,h.value);g.appendChild(d);
+  });
+}
+
+/* ── ADD TO HISTORY ── */
+function addToHistory(){
+  if(!curCat)return;
+  const v=parseFloat(document.getElementById('cVal').value);
+  const res=document.getElementById('resVal').textContent;
+  if(isNaN(v)||res==='—')return;
+  const fi=document.getElementById('fromU').value,ti=document.getElementById('toU').value;
+  convHistory=convHistory.filter(h=>!(h.catId===curCat.id&&h.fromId===fi&&h.toId===ti));
+  convHistory.unshift({catId:curCat.id,fromId:fi,toId:ti,value:v,result:res});
+  if(convHistory.length>8)convHistory.length=8;
+  renderHistory();
+}
+
+/* ── CONVERTER ── */
+function openConv(catId,fromId=null,toId=null,prefill=null){
+  const cat=CATS.find(c=>c.id===catId);curCat=cat;
+  document.getElementById('homeView').style.display='none';
+  document.getElementById('convView').style.display='block';
+  document.getElementById('bcCur').textContent=cat.name[L];
+  document.getElementById('rIcon').textContent=cat.e;
+  document.getElementById('rIcon').style.background=cat.bg;
+  document.getElementById('rTitle').textContent=cat.name[L];
+  document.getElementById('rSub').textContent=cat.desc[L];
+  const fs=document.getElementById('fromU'),ts=document.getElementById('toU');
+  fs.innerHTML='';ts.innerHTML='';
+  cat.units.forEach(u=>{
+    fs.innerHTML+=`<option value="${u.id}">${u.l[L]}</option>`;
+    ts.innerHTML+=`<option value="${u.id}">${u.l[L]}</option>`;
+  });
+  if(fromId)fs.value=fromId;
+  if(toId)ts.value=toId;
+  else if(cat.units.length>1)ts.selectedIndex=1;
+  document.getElementById('cVal').value=prefill??'';
+  document.getElementById('resVal').textContent='—';
+  document.getElementById('resUnit').textContent='';
+  document.getElementById('formulaHint').textContent='—';
+  if(prefill!==null)doConvert();
+  hideInfo();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function goHome(){
+  document.getElementById('homeView').style.display='block';
+  document.getElementById('convView').style.display='none';
+  hideInfo();
+}
+
+function doConvert(){
+  if(!curCat)return;
+  const v=parseFloat(document.getElementById('cVal').value);
+  const fi=document.getElementById('fromU').value,ti=document.getElementById('toU').value;
+  const fu=curCat.units.find(u=>u.id===fi),tu=curCat.units.find(u=>u.id===ti);
+  if(isNaN(v)){
+    document.getElementById('resVal').textContent='—';
+    document.getElementById('resUnit').textContent='';
+    document.getElementById('formulaHint').textContent='—';
+    return;
+  }
+  const result=(v*fu.f)/tu.f,fmt=fmtN(result);
+  const el=document.getElementById('resVal');
+  el.textContent=fmt;
+  el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');
+  const fl=getS(fu.l[L]),tl=getS(tu.l[L]);
+  document.getElementById('resUnit').textContent=`${fmtN(v)} ${fl} ${T[L].eq} ${fmt} ${tl}`;
+  document.getElementById('formulaHint').textContent=`1 ${fl} = ${fmtN(fu.f/tu.f)} ${tl}`;
+}
+
+function swapU(){
+  const fs=document.getElementById('fromU'),ts=document.getElementById('toU');
+  const tmp=fs.value;fs.value=ts.value;ts.value=tmp;
+  hideInfo();doConvert();
+}
+
+function copyRes(){
+  const v=document.getElementById('resVal').textContent;
+  if(v==='—')return;
+  navigator.clipboard.writeText(v).then(()=>{
+    const b=document.getElementById('copyBtn'),orig=T[L].copy;
+    b.textContent=T[L].copied;setTimeout(()=>b.textContent=orig,2000);
+  });
+}
+
+/* ── TOOLTIP ── */
+function toggleInfo(which,btn){
+  const pop=document.getElementById('infoPop');
+  const selId=document.getElementById(which==='from'?'fromU':'toU').value;
+  const info=INFO[selId];
+  if(!info){hideInfo();return;}
+  if(openInfoTarget===which&&pop.classList.contains('show')){hideInfo();return;}
+  openInfoTarget=which;
+  document.querySelectorAll('.info-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const data=info[L]||info['es'];
+  document.getElementById('popTitle').textContent=data[0];
+  document.getElementById('popBody').textContent=data[1];
+  pop.style.display='block';pop.offsetHeight;
+  const rect=btn.getBoundingClientRect();
+  const popW=pop.offsetWidth||260,popH=pop.offsetHeight||80;
+  let left=rect.left+rect.width/2-popW/2;
+  left=Math.max(8,Math.min(left,window.innerWidth-popW-8));
+  let top=rect.bottom+10;
+  if(top+popH>window.innerHeight-8)top=rect.top-popH-10;
+  pop.style.left=left+'px';pop.style.top=top+'px';
+  const arrowL=(rect.left+rect.width/2)-left;
+  document.getElementById('popArrow').style.left=Math.max(10,Math.min(arrowL,popW-18))+'px';
+  pop.classList.add('show');
+}
+function hideInfo(){
+  document.getElementById('infoPop').classList.remove('show');
+  document.querySelectorAll('.info-btn').forEach(b=>b.classList.remove('active'));
+  openInfoTarget=null;
+}
+function refreshInfo(){
+  if(openInfoTarget){const btn=document.getElementById(openInfoTarget==='from'?'infoBtnFrom':'infoBtnTo');toggleInfo(openInfoTarget,btn);}
+}
+
+/* ── UTILS ── */
+function sym(l){return l.replace(/\s*\([^)]+\)/,'').trim()||l;}
+function getS(l){const m=l.match(/\(([^)]+)\)/);return m?m[1]:l;}
+function fmtN(n){
+  if(n===0)return'0';
+  if(decMode==='sci')return n.toExponential(4);
+  if(typeof decMode==='number'){const r=n.toFixed(decMode);return parseFloat(r)===0&&n!==0?n.toExponential(4):r;}
+  if(Math.abs(n)>=1e10||(Math.abs(n)<1e-6&&n!==0))return n.toExponential(4);
+  return parseFloat(n.toPrecision(8)).toString();
+}
+function filterCats(q){renderCats(q);document.getElementById('sClr').classList.toggle('vis',q.length>0);}
+function clearSearch(){document.getElementById('searchInp').value='';filterCats('');document.getElementById('searchInp').focus();}
+
+/* ── KEYBOARD ── */
+document.getElementById('cVal').addEventListener('keydown',e=>{
+  if(e.key==='Enter'){e.preventDefault();document.getElementById('fromU').focus();}
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')hideInfo();});
+document.addEventListener('click',e=>{if(!e.target.closest('.info-btn')&&!e.target.closest('#infoPop'))hideInfo();});
+
+/* ── INIT ── */
+document.getElementById('searchInp').placeholder=T[L].search;
+document.getElementById('darkBtn').title=T[L].darkTip;
+document.getElementById('darkIco').innerHTML=MOON;
+renderCats();renderMV();
+</script>
+</body>
+</html>
